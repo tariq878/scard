@@ -1,9 +1,5 @@
-
 #include <iostream>
-#include <cstdio>
-#include <iomanip>
 #include "scard.h"
-#include "stringx.h"
 
 using namespace std;
 
@@ -12,10 +8,11 @@ int main(){
 
 	SCard card;
 	
-	card.setContext(SCARD_SCOPE_SYSTEM);
 	
 	try {
 
+		card.setContext(SCARD_SCOPE_SYSTEM);
+		
 		card.connect();
 	
 		cout << card.getReader() << endl;
