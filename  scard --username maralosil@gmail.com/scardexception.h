@@ -9,8 +9,10 @@ class SCardException {
 
 	public:
 		
+		
 		SCardException(long id);
 
+		long getId();
 		char* what();
 
 				

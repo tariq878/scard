@@ -1,11 +1,18 @@
 #include <winscard.h>
 #include "scardexception.h"
-
+#include "scarddefs.h"
 
 SCardException::SCardException(long id) 
 	: _id(id)
 {}
+
+
+long SCardException::getId() {
+
+		return _id;
+}
 	
+
 char* SCardException:: what() {
 
 	/*
@@ -93,6 +100,8 @@ char* SCardException:: what() {
 		case SCARD_W_REMOVED_CARD:
 			return "SCardException: The smart card has been removed, so further communication is not possible.";
 
+		case SCARD_E_NO_READERS_AVAILABLE:
+			return "SCardException: Cannot find a smart card reader.";
 
 		default:
 			return "SCardException: Unknown error.";

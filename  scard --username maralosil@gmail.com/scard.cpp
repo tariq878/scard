@@ -51,14 +51,22 @@ char* SCard::getReader(){
 	
 }
 
-
-void SCard::connect(){
+void SCard::connect() throw (SCardException){
 
 	unsigned long AUTO_ALLOC = SCARD_AUTOALLOCATE;
+	long rv;
 	
-	::SCardListReaders(context, NULL, (LPTSTR)&reader, &AUTO_ALLOC);
 
-	::SCardConnect(context, reader, SCARD_SHARE_SHARED,SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &card, &protocol);
+	rv = ::SCardListReaders(context, NULL, (LPTSTR)&reader, &AUTO_ALLOC);
+
+	 
+	if(rv != SCARD_S_SUCCESS)
+		throw SCardException(rv);
+
+	rv = ::SCardConnect(context, reader, SCARD_SHARE_SHARED,SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &card, &protocol);
+
+	if(rv != SCARD_S_SUCCESS)
+		throw SCardException(rv);
 
 	switch(protocol)
 	{
@@ -69,25 +77,24 @@ void SCard::connect(){
 		case SCARD_PROTOCOL_T1:
 			pioSendPci = *SCARD_PCI_T1;
 			break;
-		//default: throw exception!
-			
+					
 	}
 
 	pioRecvPci.dwProtocol = protocol;
 	pioRecvPci.cbPciLength = 255;
 
-	cout << "pioSendPci.dwProtocol = " << pioSendPci.dwProtocol << endl; 
-	cout << "pioSendPci.cbPciLength = " << pioSendPci.cbPciLength << endl; 
-
-	cout << "protocol = "<< protocol << endl;
 }
 
-void SCard::disconnect(){
+void SCard::disconnect() throw (SCardException) {
 	
-	::SCardDisconnect(card, SCARD_LEAVE_CARD);
+	int rv = ::SCardDisconnect(card, SCARD_LEAVE_CARD);
+	
+	if(rv != SCARD_S_SUCCESS)
+		throw SCardException(rv);
+
 }
 
-void SCard::transmit(const APDU &cmdApdu, APDU &respApdu){
+void SCard::transmit(const APDU &cmdApdu, APDU &respApdu) throw (SCardException) {
 
 	vector<byte> cmdApduBuffer = cmdApdu.getBuffer();
 	vector<byte>::iterator it;
@@ -102,13 +109,15 @@ void SCard::transmit(const APDU &cmdApdu, APDU &respApdu){
 		index++;
 	}
 
-	byte resp[255];
+	byte resp[255]; //buffer size maximum
 	unsigned long respLength = sizeof(resp);
 
 	int rv = ::SCardTransmit(card,&pioSendPci,cmd,cmdSize,&pioRecvPci,resp,&respLength);
 	
-	cout << "respLength = " <<  respLength << endl;
-	cout << "rv = " <<  rv << endl;
+	delete[] cmd;
+	
+	if(rv != SCARD_S_SUCCESS)
+		throw SCardException(rv);
 
 	vector<byte> respApduBuffer;
 
@@ -118,7 +127,5 @@ void SCard::transmit(const APDU &cmdApdu, APDU &respApdu){
 	}
 		
 	respApdu.setBuffer(respApduBuffer);
-
-	delete[] cmd;
 
 }
