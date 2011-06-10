@@ -89,16 +89,6 @@ void SCard::disconnect(){
 
 void SCard::transmit(const APDU &cmdApdu, APDU &respApdu){
 
-	//cout << "SCardTransmit" << endl;
-	//cout << "bufferSize = " << *bufferSize << endl;
-	//::SCardTransmit(card, &pioSendPci, apdu, sizeof(apdu), &pioRecvPci, buffer, bufferSize);
-	//cout << "sizeof(apdu) = " << sizeof(apdu) << endl;
-	//BYTE select_mf[] = { 0xA0, 0xA4, 0x00, 0x00, 0x02, 0x3F, 0x00};
-	//DWORD dwSelectMfLength = sizeof(select_mf);
-	//BYTE pbRecvBuffer[255];
-	//DWORD dwRecvLength = 255;
-	//::SCardTransmit(card,  &pioSendPci, select_mf, dwSelectMfLength, &pioRecvPci, pbRecvBuffer, &dwRecvLength);
-
 	vector<byte> cmdApduBuffer = cmdApdu.getBuffer();
 	vector<byte>::iterator it;
 
@@ -112,17 +102,8 @@ void SCard::transmit(const APDU &cmdApdu, APDU &respApdu){
 		index++;
 	}
 
-	
 	byte resp[255];
 	unsigned long respLength = sizeof(resp);
-
-	cout << "cmd:" << endl;
-	for(int i=0; i<cmdSize; i++)
-		printf("%02X ", cmd[i]);
-	
-	
-
-	cout << "cmdApduBuffer.size() = " <<  cmdApduBuffer.size() << endl;
 
 	int rv = ::SCardTransmit(card,&pioSendPci,cmd,cmdSize,&pioRecvPci,resp,&respLength);
 	
