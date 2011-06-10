@@ -33,9 +33,10 @@ SCard::~SCard(){
 
 void SCard::setContext(unsigned int scope) {
 	
-	::SCardEstablishContext(scope,NULL,NULL,&context);
-	cout << "SCardEstablishContext" << endl;
-	cout << "scope = " << scope << " context = "<< context << endl;  
+	int rv = ::SCardEstablishContext(scope,NULL,NULL,&context);
+
+	if(rv != SCARD_S_SUCCESS)
+		throw SCardException(rv);
 }
 
 /*

@@ -1,6 +1,8 @@
 #ifndef SCARDEXCEPTION_H
 #define SCARDEXCEPTION_H
 
+#include "stringx.h"
+
 class SCardException {
 
 	private:
@@ -9,12 +11,11 @@ class SCardException {
 
 	public:
 		
-		
 		SCardException(long id);
 
 		long getId();
-		char* what();
-
+		String what();
+		char* getMessage(); 
 				
 };
 
