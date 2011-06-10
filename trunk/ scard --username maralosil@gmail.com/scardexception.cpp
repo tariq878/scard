@@ -1,4 +1,6 @@
 #include <winscard.h>
+#include <sstream>
+#include <iomanip>
 #include "scardexception.h"
 #include "scarddefs.h"
 
@@ -11,9 +13,19 @@ long SCardException::getId() {
 
 		return _id;
 }
-	
 
-char* SCardException:: what() {
+
+String SCardException:: what() {
+
+	stringstream err;
+
+	err << "ScardException " << setfill('0') 
+		<< setw(8) << hex << getId() << ": " << getMessage();
+	
+	return err.str();
+}
+
+char* SCardException:: getMessage() {
 
 	/*
 	 * http://msdn.microsoft.com/en-us/library/aa374738(v=vs.85).aspx#smart_card_return_values
@@ -23,88 +35,88 @@ char* SCardException:: what() {
 	switch(_id){
 
 		case SCARD_F_INTERNAL_ERROR:
-			return "SCardException: An internal consistency check failed.";
+			return "An internal consistency check failed.";
 
 		case SCARD_E_INVALID_HANDLE:
-			return "SCardException: The supplied handle was not valid.";
+			return "The supplied handle was not valid.";
 
 		case SCARD_E_INVALID_TARGET:
-			return "SCardException: Registry startup information is missing or not valid.";
+			return "Registry startup information is missing or not valid.";
 
 		case SCARD_F_WAITED_TOO_LONG:
-			return "SCardException: An internal consistency timer has expired.";
+			return "An internal consistency timer has expired.";
 
 		case SCARD_E_INSUFFICIENT_BUFFER:
-			return "SCardException: The data buffer for returned data is too small for the returned data.";
+			return "The data buffer for returned data is too small for the returned data.";
 
 		case SCARD_E_TIMEOUT:
-			return "SCardException: The user-specified time-out value has expired.";
+			return "The user-specified time-out value has expired.";
 
 		case SCARD_E_SHARING_VIOLATION:
-			return "SCardException: The smart card cannot be accessed because of other outstanding connections.";
+			return "The smart card cannot be accessed because of other outstanding connections.";
 
 		case SCARD_E_NO_SMARTCARD:
-			return "SCardException: The operation requires a smart card, but no smart card is currently in the device.";
+			return "The operation requires a smart card, but no smart card is currently in the device.";
 
 		case SCARD_E_UNKNOWN_CARD:
-			return "SCardException: The specified smart card name is not recognized.";
+			return "The specified smart card name is not recognized.";
 
 		case SCARD_E_PROTO_MISMATCH:
-			return "SCardException: The requested protocols are incompatible with the protocol currently in use with the card.";
+			return "The requested protocols are incompatible with the protocol currently in use with the card.";
 
 		case SCARD_E_NOT_READY:
-			return "SCardException: The reader or card is not ready to accept commands.";
+			return "The reader or card is not ready to accept commands.";
 
 		case SCARD_E_SYSTEM_CANCELLED:
-			return "SCardException: The action was canceled by the system, presumably to log off or shut down.";
+			return "The action was canceled by the system, presumably to log off or shut down.";
 
 		case SCARD_F_COMM_ERROR:
-			return "SCardException: An internal communications error has been detected.";
+			return "An internal communications error has been detected.";
 
 		case SCARD_F_UNKNOWN_ERROR:
-			return "SCardException: An internal error has been detected, but the source is unknown.";
+			return "An internal error has been detected, but the source is unknown.";
 
 		case SCARD_E_INVALID_ATR:
-			return "SCardException: An ATR string obtained from the registry is not a valid ATR string.";
+			return "An ATR string obtained from the registry is not a valid ATR string.";
 
 		case SCARD_E_READER_UNAVAILABLE:
-			return "SCardException: The specified reader is not currently available for use.";
+			return "The specified reader is not currently available for use.";
 
 		case SCARD_P_SHUTDOWN:
-			return "SCardException: The operation has been aborted to allow the server application to exit.";
+			return "The operation has been aborted to allow the server application to exit.";
 
 		case SCARD_E_PCI_TOO_SMALL:
-			return "SCardException: The PCI receive buffer was too small.";
+			return "The PCI receive buffer was too small.";
 
 		case SCARD_E_READER_UNSUPPORTED:
-			return "SCardException: The reader driver does not meet minimal requirements for support.";
+			return "The reader driver does not meet minimal requirements for support.";
 
 		case SCARD_E_CARD_UNSUPPORTED:
-			return "SCardException: The smart card does not meet minimal requirements for support.";
+			return "The smart card does not meet minimal requirements for support.";
 
 		case SCARD_E_SERVICE_STOPPED:
-			return "SCardException: The smart card resource manager has shut down.";
+			return "The smart card resource manager has shut down.";
 
 		case SCARD_W_UNSUPPORTED_CARD:
-			return "SCardException: The reader cannot communicate with the card, due to ATR string configuration conflicts.";
+			return "The reader cannot communicate with the card, due to ATR string configuration conflicts.";
 
 		case SCARD_W_UNRESPONSIVE_CARD:
-			return "SCardException: The smart card is not responding to a reset.";
+			return "The smart card is not responding to a reset.";
 
 		case SCARD_W_UNPOWERED_CARD:
-			return "SCardException: Power has been removed from the smart card, so that further communication is not possible.";
+			return "Power has been removed from the smart card, so that further communication is not possible.";
 
 		case SCARD_W_RESET_CARD:
-			return "SCardException: The smart card was reset.";
+			return "The smart card was reset.";
 
 		case SCARD_W_REMOVED_CARD:
-			return "SCardException: The smart card has been removed, so further communication is not possible.";
+			return "The smart card has been removed, so further communication is not possible.";
 
 		case SCARD_E_NO_READERS_AVAILABLE:
-			return "SCardException: Cannot find a smart card reader.";
+			return "Cannot find a smart card reader.";
 
 		default:
-			return "SCardException: Unknown error.";
+			return "Unknown error.";
 
 	}
 		

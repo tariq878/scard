@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <cstdio>
+#include <iomanip>
 #include "scard.h"
 #include "stringx.h"
 
@@ -30,10 +31,7 @@ int main(){
 	
 	} catch(SCardException& e) {
 
-		//cout << setw(8) << hex << e.getId << endl;
-		printf("Error: returned 0x%08X\n", e.getId());
-		cout<< e.what() << endl;
-
+		cerr << e.what() << endl;
 		
 	}
 	
