@@ -8,6 +8,8 @@
 
 #include <winscard.h>
 #include "apdu.h"
+#include "scardexception.h"
+
 
 class SCard {
 
@@ -28,9 +30,9 @@ class SCard {
 		//void listReaders();
 		
 		char*  getReader();
-		void connect();
-		void transmit(const APDU &cdmApdu, APDU &respApdu);
-		void disconnect();
+		void connect() throw (SCardException);
+		void transmit(const APDU &cdmApdu, APDU &respApdu) throw (SCardException);
+		void disconnect() throw (SCardException);
 		
 };
 
