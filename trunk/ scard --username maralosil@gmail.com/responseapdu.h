@@ -11,6 +11,7 @@ class ResponseAPDU : public APDU {
 		ResponseAPDU(byte *buffer, int length);
 		ResponseAPDU(String apdu);
 		
+		std::vector<byte> getData();
 		byte getSW1();
 		byte getSW2();
 		int getSW();

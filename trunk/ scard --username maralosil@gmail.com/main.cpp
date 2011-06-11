@@ -7,11 +7,15 @@ using namespace std;
 
 int main(){
 
-	ResponseAPDU resp("A0:A4:00:00:02:31:32");
+	ResponseAPDU resp("A0:A4:00:00:02:90:00");
 	cout << resp.toString() << endl;
 
 	cout << resp.getSW1() << endl;
 	cout << resp.getSW2() << endl;
+	cout << resp.getSW() << endl;
+
+	if(resp.getSW() == 0x9000)
+		cout << "funfa!" << endl;
 
 
 #if 0
