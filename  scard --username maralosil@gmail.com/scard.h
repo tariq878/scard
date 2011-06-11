@@ -1,15 +1,9 @@
-/*
- *
- *
- */
-
 #ifndef SCARD_H
 #define SCARD_H
 
 #include <winscard.h>
 #include "apdu.h"
 #include "scardexception.h"
-
 
 class SCard {
 
@@ -27,7 +21,7 @@ class SCard {
 		SCard();
 		~SCard();
 		void setContext(unsigned int scope);
-		//void listReaders();
+		//TODO void listReaders();
 		
 		char*  getReader();
 		void connect() throw (SCardException);

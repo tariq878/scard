@@ -7,21 +7,18 @@
 #include <string>
 #include <list>
 
-
-using namespace std;
-
-class String : public string {
+class String : public std::string {
 	
 	public:
 		
 		//Constructors
-		String (char* s) : string(s) {};
-		String (const std::string& s) : string(s) {};
+		String (char* s) : std::string(s) {};
+		String (const std::string& s) : std::string(s) {};
 
 				
-		list<String> split(const char* delimiter) {
+		std::list<String> split(const char* delimiter) {
 			
-			list<String> tokens;
+			std::list<String> tokens;
 					
 			char* data = new char [this->size()+1];
 			::strcpy(data, this->c_str());
@@ -41,7 +38,6 @@ class String : public string {
 			
 			return tokens;
 		}
-
 		
 		String trim() {
 			
@@ -73,6 +69,5 @@ class String : public string {
 								
 		}
 };
-
 
 #endif //STRINGX_H

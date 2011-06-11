@@ -1,13 +1,20 @@
-class ResponseAPDU : public APDU {
+#ifndef RESPONSEAPDU_H
+#define RESPONSEAPDU_H
 
-	private:
-		
-		int sw;
-		int sw1;
-		int sw2;
+#include "apdu.h"
+
+class ResponseAPDU : public APDU {
 
 	public:
 		
 		ResponseAPDU();
+		ResponseAPDU(byte *buffer, int length);
+		ResponseAPDU(String apdu);
+		
+		byte getSW1();
+		byte getSW2();
+		int getSW();
 
 };
+
+#endif //RESPONSEAPDU_H

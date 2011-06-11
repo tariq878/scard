@@ -1,5 +1,3 @@
-
-
 #ifndef APDU_H
 #define APDU_H
 
@@ -11,7 +9,7 @@ class APDU {
 
 	protected:
 		
-		vector<byte> apduBuffer;
+		std::vector<byte> apduBuffer;
 		
 	public:
 		
@@ -24,8 +22,8 @@ class APDU {
 		~APDU();
 
 		//Methods
-		vector<byte> getBuffer() const;
-		void setBuffer(vector<byte> buffer);
+		std::vector<byte> getBuffer() const;
+		void setBuffer(std::vector<byte> buffer);
 		String toString();
 				
 };
