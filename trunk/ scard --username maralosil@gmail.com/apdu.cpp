@@ -2,23 +2,21 @@
 #include <iomanip>
 #include "apdu.h"
 
-
 APDU::APDU()
 {} 
 
 APDU::APDU(byte *buffer, int length) {
 	
-	for(int index =0; index < length; index++)
+	for(int i=0; i < length; i++)
 	{
-		apduBuffer.push_back(buffer[index]);
+		apduBuffer.push_back(buffer[i]);
 	}
-
 }
 	
 APDU::APDU(String apdu){
 	
-	list<String> tokens = apdu.split(":");
-	list<String>::iterator it;
+	std::list<String> tokens = apdu.split(":");
+	std::list<String>::iterator it;
 
 	for(it=tokens.begin(); it != tokens.end(); it++){
 		
@@ -26,33 +24,34 @@ APDU::APDU(String apdu){
 
 		apduBuffer.push_back(s.toLong(16));
 	}
-
-
 }
 
 APDU::~APDU(){}
 
-
-vector<byte> APDU::getBuffer() const{
+std::vector<byte> APDU::getBuffer() const{
+	
 	return apduBuffer;
 }
 
-
-void APDU::setBuffer(vector<byte> buffer){
+void APDU::setBuffer(std::vector<byte> buffer){
 	
 	apduBuffer = buffer;
-
 }
 
 String APDU::toString(){
 
-	stringstream apdu;
+	std::stringstream apdu;
 
-	vector<byte>:: iterator it;
-	
-	for(it=apduBuffer.begin(); it != apduBuffer.end(); it++){
-		apdu << setfill('0') << setw(2) << hex << (int)*it << " "; 
+	std::vector<byte>:: iterator it = apduBuffer.begin();
+
+	for(int j=1; it!=apduBuffer.end(); it++,j++){
+
+		apdu << std::setfill('0') << std::setw(2)
+			<< std::hex << (int)*it; 
+		
+		if(j < apduBuffer.size())
+			apdu << " ";
 	}
-
+			
 	return apdu.str();
 }

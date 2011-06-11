@@ -8,29 +8,22 @@ SCardException::SCardException(long id)
 	: _id(id)
 {}
 
-
 long SCardException::getId() {
 
-		return _id;
+	return _id;
 }
 
+String SCardException::what() {
 
-String SCardException:: what() {
+	std::stringstream err;
 
-	stringstream err;
-
-	err << "ScardException " << setfill('0') 
-		<< setw(8) << hex << getId() << ": " << getMessage();
+	err << "ScardException " << std::setfill('0') 
+		<< std::setw(8) << std::hex << getId() << ": " << getMessage();
 	
 	return err.str();
 }
 
 char* SCardException:: getMessage() {
-
-	/*
-	 * http://msdn.microsoft.com/en-us/library/aa374738(v=vs.85).aspx#smart_card_return_values
-	 *
-	 */
 
 	switch(_id){
 
@@ -115,11 +108,12 @@ char* SCardException:: getMessage() {
 		case SCARD_E_NO_READERS_AVAILABLE:
 			return "Cannot find a smart card reader.";
 
+		case SCARD_E_NO_RESRC_MNGR_RUNNING:
+			return "The Smart card resource manager is not running.";
+
 		default:
 			return "Unknown error.";
 
 	}
 		
 }
-
-	

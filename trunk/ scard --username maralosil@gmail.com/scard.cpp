@@ -1,35 +1,32 @@
-/*
- *
- *
- */
-
-
 #include <string>
 #include <iostream>
 #include "scard.h"
 
-using namespace std;
 
 SCard::SCard()
-	: context(SCARD_SCOPE_USER), card(0), reader(0), protocol(0) {}
-
+	: context(SCARD_SCOPE_USER), card(0), reader(0), protocol(0)
+{}
 
 SCard::~SCard(){
 	
+	int rv;
+
 	if(context){
 		
 		if(reader){
-			::SCardFreeMemory(context, reader);
-			cout << "SCardFreeMemory" << endl;
+			
+			rv = ::SCardFreeMemory(context, reader);
+			
+			if(rv != SCARD_S_SUCCESS)
+				throw SCardException(rv);
 		}
-		::SCardReleaseContext(context);
-		cout << "SCardReleaseContext" << endl;
+		
+		rv = ::SCardReleaseContext(context);
+
+		if(rv != SCARD_S_SUCCESS)
+				throw SCardException(rv);
 	}
-
-	cout << "end destructor" << endl;
-	
 }
-
 
 void SCard::setContext(unsigned int scope) {
 	
@@ -39,7 +36,7 @@ void SCard::setContext(unsigned int scope) {
 		throw SCardException(rv);
 }
 
-/*
+/* TODO
 void SCard::listReaders(){
 
 	::SCardListReaders(context, NULL,(LPTSTR)&readers, &dwReaders);
@@ -49,7 +46,6 @@ void SCard::listReaders(){
 char* SCard::getReader(){
 
 	return reader;
-	
 }
 
 void SCard::connect() throw (SCardException){
@@ -83,7 +79,6 @@ void SCard::connect() throw (SCardException){
 
 	pioRecvPci.dwProtocol = protocol;
 	pioRecvPci.cbPciLength = 255;
-
 }
 
 void SCard::disconnect() throw (SCardException) {
@@ -97,20 +92,20 @@ void SCard::disconnect() throw (SCardException) {
 
 void SCard::transmit(const APDU &cmdApdu, APDU &respApdu) throw (SCardException) {
 
-	vector<byte> cmdApduBuffer = cmdApdu.getBuffer();
-	vector<byte>::iterator it;
+	std::vector<byte> cmdApduBuffer = cmdApdu.getBuffer();
+	std::vector<byte>::iterator it;
 
 	int cmdSize = cmdApduBuffer.size();
 	byte* cmd = new byte[cmdSize];
 	
-	int index = 0;
+	int j = 0;
 	for(it = cmdApduBuffer.begin(); it < cmdApduBuffer.end(); it++){
 	
-		cmd[index] = *it;
-		index++;
+		cmd[j] = *it;
+		j++;
 	}
 
-	byte resp[255]; //buffer size maximum
+	byte resp[255]; //Maximum buffer size 
 	unsigned long respLength = sizeof(resp);
 
 	int rv = ::SCardTransmit(card,&pioSendPci,cmd,cmdSize,&pioRecvPci,resp,&respLength);
@@ -120,11 +115,11 @@ void SCard::transmit(const APDU &cmdApdu, APDU &respApdu) throw (SCardException)
 	if(rv != SCARD_S_SUCCESS)
 		throw SCardException(rv);
 
-	vector<byte> respApduBuffer;
+	std::vector<byte> respApduBuffer;
 
-	for(int ct =0; ct < respLength; ct++){
+	for(int i=0; i < respLength; i++){
 	
-		respApduBuffer.push_back(resp[ct]);
+		respApduBuffer.push_back(resp[i]);
 	}
 		
 	respApdu.setBuffer(respApduBuffer);
