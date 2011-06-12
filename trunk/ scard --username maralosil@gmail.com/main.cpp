@@ -1,28 +1,13 @@
 #include <iostream>
 #include "scard.h"
-#include "responseapdu.h"
+#include "stringx.h"
 
 using namespace std;
 
-
 int main(){
 
-	ResponseAPDU resp("A0:A4:00:00:02:90:00");
-	cout << resp.toString() << endl;
-
-	cout << resp.getSW1() << endl;
-	cout << resp.getSW2() << endl;
-	cout << resp.getSW() << endl;
-
-	if(resp.getSW() == 0x9000)
-		cout << "funfa!" << endl;
-
-
-#if 0
 	SCard card;
-
-
-
+	
 	try {
 
 		card.setContext(SCARD_SCOPE_SYSTEM);
@@ -31,22 +16,36 @@ int main(){
 
 		cout << card.getReader() << endl;
 
-		APDU cmd("A0:A4:00:00:02:3F:00");
+		for(;;) {
+		
+			cout << "apdu>";
+		
+			String in;
+		
+			getline(cin,in);
 
-		APDU resp;
+			in = in.trim().toLower();
 
-		card.transmit(cmd,resp);
+			if(in == "quit"){
+				
+				cout << "Bye" << endl;
+				break;
+			}
 
-		cout << cmd.toString() << endl;
-		cout << resp.toString() << endl;
+			APDU cmd(in,APDU::Separator::SPACE);
+			APDU resp;
 
+			card.transmit(cmd,resp);
+
+			//cout << resp.toString() << endl;
+			cout << resp.toString() << endl;
+		}
+		
 	} catch(SCardException& e) {
 
 		cerr << e.what() << endl;
 	}
-#endif
-
-	
+		
 	return 0;
 }
 

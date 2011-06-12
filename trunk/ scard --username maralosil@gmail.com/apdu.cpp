@@ -13,9 +13,32 @@ APDU::APDU(byte *buffer, int length) {
 	}
 }
 	
-APDU::APDU(String apdu){
+APDU::APDU(String apdu, Separator sep){
 	
-	std::list<String> tokens = apdu.split(":");
+	const char* dlmter;
+	
+	switch(sep){
+		
+		default:
+		case COLON:
+			dlmter = ":";
+			break;
+
+		case SEMICOLON:
+			dlmter = ";";
+			break;
+
+		case COMMA:
+			dlmter = ",";
+			break;
+
+		case SPACE:
+			dlmter = " ";
+			break;
+
+	}
+	
+	std::list<String> tokens = apdu.split(dlmter);
 	std::list<String>::iterator it;
 
 	for(it=tokens.begin(); it != tokens.end(); it++){
