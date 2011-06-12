@@ -60,7 +60,9 @@ void SCard::connect() throw (SCardException){
 	if(rv != SCARD_S_SUCCESS)
 		throw SCardException(rv);
 
-	rv = ::SCardConnect(context, reader, SCARD_SHARE_SHARED,SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, &card, &protocol);
+	rv = ::SCardConnect(context, reader, 
+			SCARD_SHARE_SHARED,SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1,
+			&card, &protocol);
 
 	if(rv != SCARD_S_SUCCESS)
 		throw SCardException(rv);

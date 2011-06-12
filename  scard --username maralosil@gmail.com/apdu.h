@@ -13,10 +13,18 @@ class APDU {
 		
 	public:
 		
+		//TODO
+		static enum Separator {
+			COLON,
+			SEMICOLON,
+			COMMA,
+			SPACE
+		};
+
 		//Contructors
 		APDU();
 		APDU(byte *buffer, int length);
-		APDU(String apdu);
+		APDU(String apdu, Separator sep = Separator::COLON);
 
 		//Destructor
 		~APDU();

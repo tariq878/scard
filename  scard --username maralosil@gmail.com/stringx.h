@@ -12,6 +12,7 @@ class String : public std::string {
 	public:
 		
 		//Constructors
+		String () : std::string() {};
 		String (char* s) : std::string(s) {};
 		String (const std::string& s) : std::string(s) {};
 
@@ -67,6 +68,23 @@ class String : public std::string {
 
 			return ::strtol( this->c_str(), 0, base);
 								
+		}
+
+		String toLower(){
+			
+			char* data = new char [this->size()+1];
+			::strcpy(data, this->c_str());
+
+			int i=0;
+			while(data[i]){
+				data[i] = ::tolower(data[i]);
+				i++;
+			}
+			
+			String lower(data);
+			delete data;
+
+			return lower;
 		}
 };
 
