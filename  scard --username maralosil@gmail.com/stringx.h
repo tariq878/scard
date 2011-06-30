@@ -7,16 +7,18 @@
 #include <string>
 #include <list>
 
-class String : public std::string {
+using namespace std;
+
+class String : public string {
 	
 	public:
 		
 		//Constructors
-		String () : std::string() {};
-		String (char* s) : std::string(s) {};
-		String (const std::string& s) : std::string(s) {};
+		String () : string() {};
+		String (char* s) : string(s) {};
+		String (const string& s) : string(s) {};
+		String (const String& s) : string(s) {};
 
-				
 		std::list<String> split(const char* delimiter) {
 			
 			std::list<String> tokens;
@@ -35,13 +37,18 @@ class String : public std::string {
 				pch = strtok (0,delimiter);
 			}
 			
-			delete data;
+			delete []data;
 			
 			return tokens;
 		}
 		
 		String trim() {
 			
+			if(!this->size()) {
+
+				return *this;
+			}
+
 			char* data = new char [this->size()+1];
 			::strcpy(data, this->c_str());
 
@@ -50,7 +57,7 @@ class String : public std::string {
 			while(isspace(*lch))
 				lch++;
 
-			char* rch = data +strlen(data); 
+			char* rch = data + strlen(data); 
 
 		    while(isspace(*--rch));
 			
@@ -58,19 +65,24 @@ class String : public std::string {
 			
 			String trimmed(lch);
 
-			delete data;
+			delete []data;
 
 			return trimmed;
 	
 		}
 		
-		long toLong(int base){
+		long toLong(int base = 10){
 
 			return ::strtol( this->c_str(), 0, base);
 								
 		}
 
 		String toLower(){
+			
+			if(!this->size()) {
+
+				return *this;
+			}
 			
 			char* data = new char [this->size()+1];
 			::strcpy(data, this->c_str());
@@ -82,7 +94,7 @@ class String : public std::string {
 			}
 			
 			String lower(data);
-			delete data;
+			delete []data;
 
 			return lower;
 		}

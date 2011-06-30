@@ -4,7 +4,7 @@
 
 using namespace std;
 
-int main(){
+int main() {
 
 	SCard card;
 	
@@ -16,38 +16,47 @@ int main(){
 
 		cout << card.getReader() << endl;
 
-		for(;;) {
 		
-			cout << "apdu>";
+		char input[256];
+
+		for (;;) {
 		
-			String in;
+			cout << "apdu> ";
 		
-			getline(cin,in);
+			cin.getline(input, sizeof(input));
+
+			String in(input);
 
 			in = in.trim().toLower();
 
-			if(in == "quit"){
+			if (in == "quit") {
 				
 				cout << "Bye" << endl;
 				break;
 			}
 
 			APDU cmd(in,APDU::Separator::SPACE);
+			
 			APDU resp;
 
-			card.transmit(cmd,resp);
+			try {
 
-			//cout << resp.toString() << endl;
-			cout << resp.toString() << endl;
+				card.transmit(cmd,resp);
+				cout << resp.toString() << endl;	
+				
+			} catch (SCardException& e) {
+
+				cerr << e.what() << endl;
+			}
+
+			
 		}
 		
-	} catch(SCardException& e) {
+	} catch (SCardException& e) {
 
 		cerr << e.what() << endl;
 	}
 		
 	return 0;
 }
-
-
 
